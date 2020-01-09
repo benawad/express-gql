@@ -17,5 +17,14 @@
     "graphql": "^14.5.8",
     "graphql-jit": "^0.4.2",
     "tiny-lru": "^7.0.2"
-  }
+  },
+  "author": "Ben Awad",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benawad/express-gql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benawad/express-gql/issues"
+  },
+  "homepage": "https://github.com/benawad/express-gql#readme"
 }
