@@ -4,7 +4,7 @@ This is a mix between `fastify-gql` and `graphql-api-koa` for Express.
 
 ## Why
 
-I wanted to use `fastify-gql` but I relied on some Express middleware, so I took the GraphQL caching techniques used in `fastify-gql` and implemented them for in some `express` middleware.
+I wanted to use `fastify-gql` but I relied on some Express middleware, so I took the GraphQL caching techniques used in `fastify-gql` and copied them into some `express` middleware.
 
 ## Setup
 
