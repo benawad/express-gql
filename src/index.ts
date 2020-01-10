@@ -70,12 +70,13 @@ export const createGraphqlMiddleware = ({
 
     if (
       typeof req.body.operationName !== "string" &&
-      typeof req.body.operationName !== "undefined"
+      typeof req.body.operationName !== "undefined" &&
+      req.body.operationName !== null
     ) {
       return res
         .status(400)
         .send(
-          "Request body JSON `operationName` field must be an string/undefined."
+          "Request body JSON `operationName` field must be an string/null/undefined."
         );
     }
 
