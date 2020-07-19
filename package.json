@@ -1,6 +1,6 @@
 {
   "name": "express-gql",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "license": "MIT",
@@ -14,9 +14,11 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
-    "graphql": "^14.5.8",
     "graphql-jit": "^0.4.2",
     "tiny-lru": "^7.0.2"
+  },
+  "peerDependencies": {
+    "graphql": "*"
   },
   "author": "Ben Awad",
   "repository": {
