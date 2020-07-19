@@ -32,3 +32,7 @@ app.post(
   })
 );
 ```
+
+## Subscriptions
+
+https://github.com/apollographql/subscriptions-transport-ws
