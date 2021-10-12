@@ -5,7 +5,7 @@ import {
   GraphQLSchema,
   parse,
   validate,
-  validateSchema
+  validateSchema,
 } from "graphql";
 import { CompiledQuery, compileQuery } from "graphql-jit";
 import LRU from "tiny-lru";
@@ -22,7 +22,7 @@ interface FormatErrorParams extends ExpressParams {
 
 interface Options {
   schema: GraphQLSchema;
-  context?: (x: ExpressParams) => any;
+  context?: (x: ExpressParams) => any | Promise<any>;
   formatError?: (x: FormatErrorParams) => GraphQLError;
 }
 
@@ -38,7 +38,7 @@ interface CacheValue extends ErrorCacheValue {
 export const createGraphqlMiddleware = ({
   schema,
   context,
-  formatError
+  formatError,
 }: Options) => {
   const lru = LRU<CacheValue>(1024);
   const lruErrors = LRU<ErrorCacheValue>(1024);
@@ -108,7 +108,7 @@ export const createGraphqlMiddleware = ({
       if (validationErrors.length > 0) {
         lruErrors.set(query, { document, validationErrors });
         return res.status(400).send({
-          errors: validationErrors
+          errors: validationErrors,
         });
       }
 
@@ -119,7 +119,7 @@ export const createGraphqlMiddleware = ({
           schema,
           document,
           req.body.operationName
-        ) as CompiledQuery
+        ) as CompiledQuery,
       };
 
       lru.set(query, cached);
@@ -127,12 +127,12 @@ export const createGraphqlMiddleware = ({
 
     const result = await cached.jit.query(
       {},
-      context ? context({ req, res }) : {},
+      context ? await context({ req, res }) : {},
       req.body.variables
     );
 
     if (result.errors && formatError) {
-      result.errors = result.errors.map(error =>
+      result.errors = result.errors.map((error) =>
         formatError({ req, res, error })
       );
     }
