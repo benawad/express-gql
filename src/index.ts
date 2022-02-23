@@ -24,6 +24,7 @@ interface Options {
   schema: GraphQLSchema;
   context?: (x: ExpressParams) => any | Promise<any>;
   formatError?: (x: FormatErrorParams) => GraphQLError;
+  lockdown?: boolean;
 }
 
 interface ErrorCacheValue {
@@ -39,6 +40,7 @@ export const createGraphqlMiddleware = ({
   schema,
   context,
   formatError,
+  lockdown,
 }: Options) => {
   const lru = LRU<CacheValue>(1024);
   const lruErrors = LRU<ErrorCacheValue>(1024);
@@ -110,6 +112,14 @@ export const createGraphqlMiddleware = ({
         return res.status(400).send({
           errors: validationErrors,
         });
+      }
+
+      if (
+        lockdown &&
+        (document.definitions[0].kind !== "OperationDefinition" ||
+          document.definitions[0].selectionSet.selections.length !== 1)
+      ) {
+        return res.status(400).send(`GraphQL query selection set too large.`);
       }
 
       cached = {
